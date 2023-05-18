@@ -78,7 +78,6 @@ Ext.define("App1.view.main.Main", {
   listeners: {
     beforeRender: function () {
       let store = Ext.getStore("personnel");
-      console.log(store);
       store.load();
     },
   },

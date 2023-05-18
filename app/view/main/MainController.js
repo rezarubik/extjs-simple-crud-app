@@ -59,22 +59,34 @@ Ext.define("App1.view.main.MainController", {
     name_ = Ext.getCmp("upd_name").getValue();
     email_ = Ext.getCmp("upd_email").getValue();
 
-    console.log(`rec_id: ${rec_id}, name_: ${name_}, email_: ${email_}`);
+    // console.log(`rec_id: ${rec_id}, name_: ${name_}, email_: ${email_}`);
 
     store = Ext.getStore("personnel");
     record = store.getById(rec_id);
 
-    record.data.name = name_;
+    record.data.nama = name_;
     record.data.email = email_;
 
-    console.log(record);
+    // console.log(record);
+    // note: data yg diinput dan akan dikirimkan ke api
     let data = record.data;
     // note: new
-    let url = "http://serviceextjs.test/api/link/update";
+    let url = "http://ci3restserver.test/api/mahasiswa";
     Ext.Ajax.request({
       url: url,
-      method: "POST",
+      method: "PUT",
       params: data,
+      success: function (resp) {
+        let response = Ext.decode(resp.responseText);
+        if (response.status) {
+          Ext.Msg.alert(response.message);
+          store.load();
+        }
+      },
+      failure: function (resp) {
+        let response = Ext.decode(resp.responseText);
+        Ext.Msg.alert(response.message);
+      },
     });
     // note: old
     // store.sync();
